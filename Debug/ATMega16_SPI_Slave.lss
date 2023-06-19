@@ -1,0 +1,149 @@
+
+ATMega16_SPI_Slave.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000c2  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000136  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000001  00800060  00800060  00000136  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000136  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000168  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000030  00000000  00000000  000001a4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000617  00000000  00000000  000001d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000059c  00000000  00000000  000007eb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000233  00000000  00000000  00000d87  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000044  00000000  00000000  00000fbc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000314  00000000  00000000  00001000  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000020  00000000  00000000  00001314  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a1 36       	cpi	r26, 0x61	; 97
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 42 00 	call	0x84	; 0x84 <main>
+  74:	0c 94 5f 00 	jmp	0xbe	; 0xbe <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <SPI_Read>:
+	while (!(SPSR &(1<<SPIF)));
+}
+
+unsigned char SPI_Read()
+{
+	while (!(SPSR & (1<<SPIF)));
+  7c:	77 9b       	sbis	0x0e, 7	; 14
+  7e:	fe cf       	rjmp	.-4      	; 0x7c <SPI_Read>
+	return SPDR;
+  80:	8f b1       	in	r24, 0x0f	; 15
+}
+  82:	08 95       	ret
+
+00000084 <main>:
+
+unsigned char data;
+
+int main(void)
+{
+	DDRB &= (~(1<<DDB4)) & (~(1<<DDB5)) & (~(1<<DDB7));		//PB4,5,7 as Input {IN Slave configuration MOSI, SS, and SCK are Input}
+  84:	87 b3       	in	r24, 0x17	; 23
+  86:	8f 74       	andi	r24, 0x4F	; 79
+  88:	87 bb       	out	0x17, r24	; 23
+	DDRB |= (1<<DDB6);							//PB6 as Output {And MISO is Output}
+  8a:	87 b3       	in	r24, 0x17	; 23
+  8c:	80 64       	ori	r24, 0x40	; 64
+  8e:	87 bb       	out	0x17, r24	; 23
+	DDRC |= (1<<DDC0);		// LED is output.
+  90:	84 b3       	in	r24, 0x14	; 20
+  92:	81 60       	ori	r24, 0x01	; 1
+  94:	84 bb       	out	0x14, r24	; 20
+	SPCR |= (1<<SPE);
+  96:	8d b1       	in	r24, 0x0d	; 13
+  98:	80 64       	ori	r24, 0x40	; 64
+  9a:	8d b9       	out	0x0d, r24	; 13
+	
+	while (1)
+	{
+		data = SPI_Read();
+  9c:	0e 94 3e 00 	call	0x7c	; 0x7c <SPI_Read>
+  a0:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
+		if (data == 'A')
+  a4:	81 34       	cpi	r24, 0x41	; 65
+  a6:	19 f4       	brne	.+6      	; 0xae <main+0x2a>
+		{
+			PORTC |= (1<<PC0);
+  a8:	85 b3       	in	r24, 0x15	; 21
+  aa:	81 60       	ori	r24, 0x01	; 1
+  ac:	85 bb       	out	0x15, r24	; 21
+		}
+		if (data == 'B')
+  ae:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
+  b2:	82 34       	cpi	r24, 0x42	; 66
+  b4:	99 f7       	brne	.-26     	; 0x9c <main+0x18>
+		{
+			PORTC &= (~(1<<PC0));
+  b6:	85 b3       	in	r24, 0x15	; 21
+  b8:	8e 7f       	andi	r24, 0xFE	; 254
+  ba:	85 bb       	out	0x15, r24	; 21
+  bc:	ef cf       	rjmp	.-34     	; 0x9c <main+0x18>
+
+000000be <_exit>:
+  be:	f8 94       	cli
+
+000000c0 <__stop_program>:
+  c0:	ff cf       	rjmp	.-2      	; 0xc0 <__stop_program>
